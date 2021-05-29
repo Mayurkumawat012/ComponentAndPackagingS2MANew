@@ -2,51 +2,48 @@ package com.componentxProcessing.main.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "ReturnOrderRequest")
 public class ProcessRequest {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private int id;
+	
 	@Column(name = "UserName")
-//	@JsonProperty
 	private String userName;
 
 	@Column(name = "ContactNumber")
-//	@JsonProperty
 	private Long contactNumber;
 
 	@Column(name = "CreditCardNumber")
-//	@JsonProperty
 	private String creditCardNumber;
 
 	@Column(name = "IsPriorityRequest")
-//	@JsonProperty
 	private Boolean isPriorityRequest;
 
 	@Column(name = "ComponentType") // integral-repair, accessory-replace
-//	@JsonProperty
 	private String componentType;
 
 	@Column(name = "ComponentName")
-//	@JsonProperty
 	private String componentName;
 
 	@Column(name = "Quantity")
-//	@JsonProperty
 	private Integer quantity;
 
 	public ProcessRequest() {
 		super();
 	}
 
-	public ProcessRequest(String userName, Long contactNumber, String creditCardNumber, Boolean isPriorityRequest,
+	public ProcessRequest(int id, String userName, Long contactNumber, String creditCardNumber, Boolean isPriorityRequest,
 			String componentType, String componentName, Integer quantity) {
 		super();
+		this.id = id;
 		this.userName = userName;
 		this.contactNumber = contactNumber;
 		this.creditCardNumber = creditCardNumber;
@@ -54,6 +51,16 @@ public class ProcessRequest {
 		this.componentType = componentType;
 		this.componentName = componentName;
 		this.quantity = quantity;
+	}
+	
+	
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getUserName() {

@@ -11,6 +11,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 public class ComponentProcessingS2MaApplication {
 
 	public static void main(String[] args) {
+
+        System.setProperty("server.connection-timeout","60000");
 		SpringApplication.run(ComponentProcessingS2MaApplication.class, args);
 	}
 
