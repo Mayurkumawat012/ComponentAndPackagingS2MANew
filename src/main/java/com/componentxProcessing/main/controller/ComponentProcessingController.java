@@ -56,14 +56,14 @@ public class ComponentProcessingController {
 	 * @return ProcessResponse
 	 */
 	@PostMapping(path = "/ProcessDetail", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ProcessResponse> processResponseDetails(@RequestBody ProcessRequest processRequestObj,
+	public ResponseEntity<?> processResponseDetails(@RequestBody ProcessRequest processRequestObj,
 			@RequestHeader(name = "Authorization", required = true) String token) throws InvalidTokenException {
 
 		logger.info(token);
 		ValidatingDTO validatingDTO = authClient.getsValidity(token);
 		if (!validatingDTO.isValidStatus()) {
-
-			throw new InvalidTokenException("Token is either expired or invalid...");
+			return new ResponseEntity<>("Token is either expired or invalid...", HttpStatus.FORBIDDEN);
+//			throw new InvalidTokenException("Token is either expired or invalid...");
 		}
 
 		logger.info("Checking if component is Integral or Accessory - BEGINS");
@@ -80,7 +80,8 @@ public class ComponentProcessingController {
 
 			logger.info("Retrieving the ProcessResponse object for Accessory - ENDS");
 		} else {
-			throw new ComponentTyepNotFoundException("Wrong Component Type");
+			return new ResponseEntity<>("Wrong Component Type", HttpStatus.BAD_REQUEST);
+//			throw new ComponentTyepNotFoundException("Wrong Component Type");
 		}
 
 		logger.info("Checking if component is Integral or Accessory - ENDS");
@@ -105,7 +106,7 @@ public class ComponentProcessingController {
 	 * @return PaymentStatusDTO
 	 */
 	@PostMapping(path = "/completeProcessing/{requestId}/{creditCardNumber}/{creditLimit}/{processingCharge}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<PaymentStatusDTO> messageConfirmation(@PathVariable String requestId,
+	public ResponseEntity<?> messageConfirmation(@PathVariable String requestId,
 			@PathVariable String creditCardNumber, @PathVariable Integer creditLimit,
 			@PathVariable Integer processingCharge,
 			@RequestHeader(name = "Authorization", required = true) String token) throws InvalidTokenException {
@@ -114,7 +115,8 @@ public class ComponentProcessingController {
 
 		if (!authClient.getsValidity(token).isValidStatus()) {
 
-			throw new InvalidTokenException("Token is either expired or invalid...");
+			return new ResponseEntity<>("Token is either expired or invalid...", HttpStatus.FORBIDDEN);
+//			throw new InvalidTokenException("Token is either expired or invalid...");
 		}
 		logger.info("Controller Component");
 		try {
