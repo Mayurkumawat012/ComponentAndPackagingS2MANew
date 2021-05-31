@@ -6,7 +6,11 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import com.componentxProcessing.main.dto.ValidatingDTO;
 
-@FeignClient(name = "AUTH-SERVICE", url = "http://localhost:9090/auth")
+/*
+ * FEIGN CLIENT FOR AUTH VALIDATE URL
+*/
+//@FeignClient(name = "AUTH-SERVICE", url = "http://localhost:9090/auth")
+@FeignClient(name = "AUTH-SERVICE", url = "http://localhost:8081/auth")
 public interface AuthClient {
 
 	@GetMapping(value = "/validate")
