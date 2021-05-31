@@ -36,16 +36,23 @@ public class ComponentProcessingController {
 
 	@Autowired
 	private RepairServiceImpl repairServiceImplObj;
+
 	@Autowired
 	private ReplacementServiceImpl replacementServiceImplObj;
+
 	@Autowired
 	private ProcessResponse processResponseObj;
+
 	@Autowired
 	private AuthClient authClient;
 
 	@Autowired
 	private PaymentService paymentService;
 
+	
+	
+	
+	
 	/*
 	 * This function will return process response
 	 * 
@@ -62,8 +69,8 @@ public class ComponentProcessingController {
 		logger.info(token);
 		ValidatingDTO validatingDTO = authClient.getsValidity(token);
 		if (!validatingDTO.isValidStatus()) {
-			return new ResponseEntity<>("Token is either expired or invalid...", HttpStatus.FORBIDDEN);
-//			throw new InvalidTokenException("Token is either expired or invalid...");
+//			return new ResponseEntity<>("Token is either expired or invalid...", HttpStatus.FORBIDDEN);
+			throw new InvalidTokenException("Token is either expired or invalid...");
 		}
 
 		logger.info("Checking if component is Integral or Accessory - BEGINS");
@@ -80,8 +87,8 @@ public class ComponentProcessingController {
 
 			logger.info("Retrieving the ProcessResponse object for Accessory - ENDS");
 		} else {
-			return new ResponseEntity<>("Wrong Component Type", HttpStatus.BAD_REQUEST);
-//			throw new ComponentTyepNotFoundException("Wrong Component Type");
+//			return new ResponseEntity<>("Wrong Component Type", HttpStatus.BAD_REQUEST);
+			throw new ComponentTyepNotFoundException("Wrong Component Type");
 		}
 
 		logger.info("Checking if component is Integral or Accessory - ENDS");
@@ -90,6 +97,9 @@ public class ComponentProcessingController {
 
 	}
 
+	
+	
+	
 	/*
 	 * This function will return Payment Status
 	 * 
@@ -106,17 +116,16 @@ public class ComponentProcessingController {
 	 * @return PaymentStatusDTO
 	 */
 	@PostMapping(path = "/completeProcessing/{requestId}/{creditCardNumber}/{creditLimit}/{processingCharge}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> messageConfirmation(@PathVariable String requestId,
-			@PathVariable String creditCardNumber, @PathVariable Integer creditLimit,
-			@PathVariable Integer processingCharge,
+	public ResponseEntity<?> messageConfirmation(@PathVariable String requestId, @PathVariable String creditCardNumber,
+			@PathVariable Integer creditLimit, @PathVariable Integer processingCharge,
 			@RequestHeader(name = "Authorization", required = true) String token) throws InvalidTokenException {
 
 		logger.info(token);
 
 		if (!authClient.getsValidity(token).isValidStatus()) {
 
-			return new ResponseEntity<>("Token is either expired or invalid...", HttpStatus.FORBIDDEN);
-//			throw new InvalidTokenException("Token is either expired or invalid...");
+//			return new ResponseEntity<>("Token is either expired or invalid...", HttpStatus.FORBIDDEN);
+			throw new InvalidTokenException("Token is either expired or invalid...");
 		}
 		logger.info("Controller Component");
 		try {
@@ -131,11 +140,11 @@ public class ComponentProcessingController {
 
 	}
 
-/*	@GetMapping(path = "/health-check")
-	public ResponseEntity<String> healthCheck() {
-		logger.info("ComponentProcessing Microservice is Up and Running....");
-		return new ResponseEntity<>("OK", HttpStatus.OK);
-	}
-*/	
+	/*
+	 * @GetMapping(path = "/health-check") public ResponseEntity<String>
+	 * healthCheck() {
+	 * logger.info("ComponentProcessing Microservice is Up and Running...."); return
+	 * new ResponseEntity<>("OK", HttpStatus.OK); }
+	 */
 
 }
