@@ -25,13 +25,22 @@ public class PaymentServiceTest {
 	@Test
 	@DisplayName("Checking for ProcessRequestService - if it is loading or not for @GetMapping")
 	 void repairServiceImplNotNullTest() {
-		assertThat(paymentService).isNull();
+		assertThat(paymentService).isNotNull();
 	}
 	
 	@Test
-	public void testMessageConfirmation() {
-		when(paymentClient.paymentDetails("requestId", "creditCardNumber", 100000, 500, "token")).thenReturn(new PackagingAndDeliveryDTO(0.0));
-		String message = paymentService.messageConfirmation("requestId", "creditCardNumber", 100000, 500, "token");
+	public void testMessageConfirmationFailed() {
+		when(paymentClient.paymentDetails("requestId", "creditCardNumber", 10, 500, "token")).thenReturn(new PackagingAndDeliveryDTO(0.0));
+		String message = paymentService.messageConfirmation("requestId", "creditCardNumber", 10, 500, "token");
 		assertEquals("Operation Not Successful", message);
 	}
+	
+	@Test
+	public void testMessageConfirmationSuccess() {
+		when(paymentClient.paymentDetails("requestId", "creditCardNumber", 10000, 500, "token")).thenReturn(new PackagingAndDeliveryDTO(100.0));
+		String message = paymentService.messageConfirmation("requestId", "creditCardNumber", 10000, 500, "token");
+		assertEquals("Operation Successful", message);
+	}
+	
+	
 }

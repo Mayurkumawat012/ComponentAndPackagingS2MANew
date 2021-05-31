@@ -131,10 +131,11 @@ public class ComponentProcessingController {
 
 	}
 
-	@GetMapping(path = "/health-check")
+/*	@GetMapping(path = "/health-check")
 	public ResponseEntity<String> healthCheck() {
 		logger.info("ComponentProcessing Microservice is Up and Running....");
 		return new ResponseEntity<>("OK", HttpStatus.OK);
 	}
+*/	
 
 }

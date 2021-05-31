@@ -58,7 +58,7 @@ public class RepairServiceImpl implements ProcessRequestService {
 			processResponseObj.setDateOfDelivery(strDate);
 		}
 		logger.info("After Priority Check");
-		logger.info("Utilities.getAlphaNumericString(16)" + Utilities.getAlphaNumericString(16));
+//		logger.info("Utilities.getAlphaNumericString(16)" + Utilities.getAlphaNumericString(16));
 		processResponseObj.setRequestId(Utilities.generateRequestId());
 		processRequestRepo.save(processRequestObj);
 
