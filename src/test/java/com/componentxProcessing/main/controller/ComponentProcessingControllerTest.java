@@ -74,14 +74,21 @@ public class ComponentProcessingControllerTest {
 	 */
 	@Test
 	void testProcessDetailAPIBadRequest() throws InvalidTokenException {
+		
 		String token = "token";
 		ProcessRequest processRequest = new ProcessRequest(1, "satyam", 7982267437L, "798798798797987", true,
 				"Accessory-Unknown", "Mouse", 4);
+		try {
 		when(authClient.getsValidity(token)).thenReturn(new ValidatingDTO(true));
 		when(replacementServiceImplObj.processService(processRequest, "token"))
 				.thenThrow(ComponentTyepNotFoundException.class);
-		assertEquals(500,
-				componentProcessingController.processResponseDetails(processRequest, token).getStatusCodeValue());
+		}
+		catch (ComponentTyepNotFoundException ComponentTypeNotFound) {
+			// TODO: handle exception
+			assertEquals(500,
+					componentProcessingController.processResponseDetails(processRequest, token).getStatusCodeValue());
+		}
+		
 	}
 
 	/*
