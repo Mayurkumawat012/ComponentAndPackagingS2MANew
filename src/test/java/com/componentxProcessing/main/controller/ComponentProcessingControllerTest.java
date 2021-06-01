@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.componentxProcessing.main.client.AuthClient;
 import com.componentxProcessing.main.dto.ValidatingDTO;
+import com.componentxProcessing.main.exceptions.ComponentTyepNotFoundException;
 import com.componentxProcessing.main.exceptions.InvalidTokenException;
 import com.componentxProcessing.main.model.ProcessRequest;
 import com.componentxProcessing.main.model.ProcessResponse;
@@ -56,11 +57,16 @@ public class ComponentProcessingControllerTest {
 		String token = "token";
 		ProcessRequest processRequest = new ProcessRequest(1, "satyam", 7982267437L, "798798798797987", true,
 				"Accessory", "Mouse", 4);
-		when(authClient.getsValidity(token)).thenReturn(new ValidatingDTO(false));
-		when(replacementServiceImplObj.processService(processRequest, "token"))
-				.thenReturn(new ProcessResponse("1234", 500, (double) 569, "05-06-2020"));
-		assertEquals(403,
-				componentProcessingController.processResponseDetails(processRequest, token).getStatusCodeValue());
+		try {
+
+			when(authClient.getsValidity(token)).thenReturn(new ValidatingDTO(false));
+			when(replacementServiceImplObj.processService(processRequest, "token"))
+					.thenReturn(new ProcessResponse("1234", 500, (double) 569, "05-06-2020"));
+		} catch (InvalidTokenException invalid) {
+
+			assertEquals(403,
+					componentProcessingController.processResponseDetails(processRequest, token).getStatusCodeValue());
+		}
 	}
 
 	/*
@@ -73,8 +79,8 @@ public class ComponentProcessingControllerTest {
 				"Accessory-Unknown", "Mouse", 4);
 		when(authClient.getsValidity(token)).thenReturn(new ValidatingDTO(true));
 		when(replacementServiceImplObj.processService(processRequest, "token"))
-				.thenReturn(new ProcessResponse("1234", 500, (double) 569, "05-06-2020"));
-		assertEquals(400,
+				.thenThrow(ComponentTyepNotFoundException.class);
+		assertEquals(500,
 				componentProcessingController.processResponseDetails(processRequest, token).getStatusCodeValue());
 	}
 
@@ -97,11 +103,17 @@ public class ComponentProcessingControllerTest {
 	@Test
 	void testCompleteProcessingAPIFORBIDDEN() throws InvalidTokenException {
 		String token = "token";
+		try {
+			
 		when(authClient.getsValidity(token)).thenReturn(new ValidatingDTO(false));
 		when(paymentService.messageConfirmation("123456789", "8989898989898989", 100000, 500, token))
 				.thenReturn("Operation Succesfull");
-		assertEquals(403, componentProcessingController
-				.messageConfirmation("123456789", "8989898989898989", 100000, 500, token).getStatusCodeValue());
+		}
+		catch (InvalidTokenException invalid) {
+			assertEquals(403, componentProcessingController
+					.messageConfirmation("123456789", "8989898989898989", 100000, 500, token).getStatusCodeValue());	
+		}
+		
 	}
 
 }
