@@ -16,7 +16,7 @@ import feign.Headers;
 */
 @Headers("Content-Type: application/json")
 //@FeignClient(name = "payment-service", url = "localhost:8082/payment")
-@FeignClient(name = "payment-service", url = "localhost:8082/payment")
+@FeignClient(name = "payment-service", url = "http://paymnet.us-east-2.elasticbeanstalk.com/payment")
 
 public interface PaymentClient {
 
